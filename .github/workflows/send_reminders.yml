@@ -1,0 +1,32 @@
+name: Run Daily SMS Reminder
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Every 5 minutes for testing
+  workflow_dispatch:       # Allows manual run from GitHub UI
+
+jobs:
+  send-reminder:
+    runs-on: ubuntu-latest
+
+    env:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+      TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+      PHONE_JOSE: ${{ secrets.PHONE_JOSE }}
+      PHONE_WIFE: ${{ secrets.PHONE_WIFE }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run reminder script
+        run: python send_reminders.py
