@@ -28,8 +28,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r almostForgot/requirements.txt
 
-      - name: Initialize SQLite schema
-        run: python almostForgot/init_db.py
 
       - name: Run reminder script
         run: python almostForgot/send_reminders.py
