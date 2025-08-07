@@ -5,6 +5,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copy your app code
+COPY requirements.txt requirements.txt
 COPY . .
 
 # Install dependencies
