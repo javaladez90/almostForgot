@@ -45,30 +45,29 @@ def ensure_schema():
     conn.commit()
     conn.close()
 
+from datetime import datetime
+
 def check_and_send_tasks():
-    ensure_schema()
+    now = datetime.now()
+    print(f"[DEBUG] runner now = {now.isoformat(timespec='minutes')}")
+    
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-
-    now = datetime.now().isoformat(timespec='minutes')
-
     cursor.execute("SELECT id, recipient, message, send_time FROM tasks")
     tasks = cursor.fetchall()
 
-    for task in tasks:
-        task_id, recipient, message, send_time = task
+    for task_id, recipient, message, send_time_str in tasks:
+        # parse the stored ISO string (no timezone info)
+        send_dt = datetime.fromisoformat(send_time_str)
+        print(f"[DEBUG] task {task_id} send_time = {send_dt.isoformat(timespec='minutes')}")
 
-        if send_time <= now:
-            phone_number = PHONE_NUMBERS.get(recipient.lower())
-            if phone_number:
-                print(f"Sending reminder to {recipient}: {message}")
-                send_sms(phone_number, message)
-
-                # Delete task after sending
-                cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
-                conn.commit()
-
+        if send_dt <= now:
+            print(f"Sending reminder to {recipient}: {message}")
+            send_sms(PHONE_NUMBERS[recipient], message)
+            cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+            conn.commit()
     conn.close()
+
 
 if __name__ == "__main__":
     ensure_schema()
