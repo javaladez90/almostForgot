@@ -26,7 +26,7 @@ jobs:
           python-version: 3.11
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r almostForgot/requirements.txt
 
       - name: Run reminder script
-        run: python send_reminders.py
+        run: python almostForgot/send_reminders.py
