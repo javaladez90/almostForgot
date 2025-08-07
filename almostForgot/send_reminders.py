@@ -45,7 +45,7 @@ def ensure_schema():
     conn.close()
 
 def check_and_send_tasks():
-    conn = sqlite3.connect("tasks.db")
+    conn = sqlite3.connect("/data/tasks.db")
     cursor = conn.cursor()
 
     now = datetime.now().isoformat(timespec='minutes')

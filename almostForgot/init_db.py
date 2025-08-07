@@ -1,7 +1,7 @@
 import sqlite3
 
 
-conn = sqlite3.connect("tasks.db")
+conn = sqlite3.connect("/data/tasks.db")
 cursor = conn.cursor()
 
 
