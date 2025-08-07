@@ -30,6 +30,19 @@ def send_sms(to, message):
         from_=TWILIO_FROM_NUMBER,
         body=message
     )
+def ensure_schema():
+    conn = sqlite3.connect("tasks.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS tasks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            recipient TEXT NOT NULL,
+            message TEXT NOT NULL,
+            send_time TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
 
 def check_and_send_tasks():
     conn = sqlite3.connect("tasks.db")
@@ -56,4 +69,5 @@ def check_and_send_tasks():
     conn.close()
 
 if __name__ == "__main__":
+    ensure_schema()
     check_and_send_tasks()
