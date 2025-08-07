@@ -39,31 +39,37 @@ def home():
         conn.close()
         return redirect("/")
 
-    # GET falls through to render the HTML form
+    # GET → render the form
     return '''
     <!doctype html>
     <html>
-    <head> … your <style> … </head>
-    <body>
-      <h1>Almost Forgot</h1>
-      <form method="post">
-        <input type="text" name="task" placeholder="What do you need to remember?" required><br>
-        <select name="recipient" required>
-          <option value="" disabled selected>Send reminder to…</option>
-          <option value="jose">Jose</option>
-          <option value="wife">Wife</option>
-        </select><br>
-        <input type="datetime-local" id="taskTime" name="send_time" required><br>
-        <button type="submit">Add Task</button>
-      </form>
-      <script>
-        window.onload = () => {
-          const now = new Date();
-          now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-          document.getElementById('taskTime').value = now.toISOString().slice(0,16);
-        };
-      </script>
-    </body>
+      <head>
+        <title>Almost Forgot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          /* your existing CSS here */
+        </style>
+      </head>
+      <body>
+        <h1>Almost Forgot</h1>
+        <form method="post">
+          <input type="text" name="task" placeholder="What do you need to remember?" required><br>
+          <select name="recipient" required>
+            <option value="" disabled selected>Send reminder to...</option>
+            <option value="jose">Jose</option>
+            <option value="wife">Wife</option>
+          </select><br>
+          <input type="datetime-local" id="taskTime" name="send_time" required><br>
+          <button type="submit">Add Task</button>
+        </form>
+        <script>
+          window.onload = () => {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('taskTime').value = now.toISOString().slice(0,16);
+          };
+        </script>
+      </body>
     </html>
     '''
 
@@ -74,6 +80,7 @@ def debug_tasks():
     cursor.execute("SELECT id, recipient, message, send_time FROM tasks")
     rows = cursor.fetchall()
     conn.close()
+
     return jsonify([
       {"id": r[0], "recipient": r[1], "message": r[2], "send_time": r[3]}
       for r in rows
