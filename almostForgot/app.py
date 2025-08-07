@@ -47,7 +47,72 @@ def home():
         <title>Almost Forgot</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          /* your existing CSS here */
+          <style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+  }
+
+  h1 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    color: #2c3e50;
+    text-align: center;
+  }
+
+  form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  input[type="text"],
+  input[type="datetime-local"],
+  select {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  button {
+    width: 100%;
+    padding: 1rem;
+    background-color: #3d8361;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  button:hover {
+    background-color: #2b644b;
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 1.6rem; }
+    form { padding: 1.5rem; }
+    button { font-size: 0.95rem; }
+  }
+</style>
+
         </style>
       </head>
       <body>
