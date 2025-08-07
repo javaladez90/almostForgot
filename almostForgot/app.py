@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, jsonify
 
 import sqlite3
 from datetime import datetime
@@ -24,7 +24,21 @@ def home():
             conn.commit()
             conn.close()
             return redirect("/")
-
+        
+@app.route("/debug/tasks")
+def debug_tasks():
+    conn = sqlite3.connect("tasks.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, recipient, message, send_time FROM tasks")
+    rows = cursor.fetchall()
+    conn.close()
+    return jsonify([{
+        "id": r[0],
+        "recipient": r[1],
+        "message": r[2],
+        "send_time": r[3]
+    } for r in rows])
+    
     return '''
     <!doctype html>
     <html>
