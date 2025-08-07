@@ -21,7 +21,7 @@ PHONE_NUMBERS = {
 }
 
 
-
+DB_PATH = os.getenv("TASKS_DB_PATH", "tasks.db")
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 def send_sms(to, message):
@@ -30,22 +30,24 @@ def send_sms(to, message):
         from_=TWILIO_FROM_NUMBER,
         body=message
     )
+    
 def ensure_schema():
-    conn = sqlite3.connect("tasks.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS tasks (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            recipient TEXT NOT NULL,
-            message TEXT NOT NULL,
-            send_time TEXT NOT NULL
-        )
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""
+      CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        recipient TEXT NOT NULL,
+        message TEXT NOT NULL,
+        send_time TEXT NOT NULL
+      )
     """)
     conn.commit()
     conn.close()
 
 def check_and_send_tasks():
-    conn = sqlite3.connect("/data/tasks.db")
+    ensure_schema()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     now = datetime.now().isoformat(timespec='minutes')
